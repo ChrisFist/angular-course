@@ -9,7 +9,7 @@ export function saveCourse(req: Request, res: Response) {
 
     console.log("Saving course", id, JSON.stringify(changes));
 
-    const course = findCourseById(id);
+    const course = findCourseById(id as unknown as number);
 
     course.description = changes.description;
 
