@@ -21,8 +21,9 @@ import { CourseTitleComponent } from "./course-title/course-title.component";
   styleUrls: ["./app.component.css"],
 })
 export class AppComponent implements OnInit {
-  courses: Course[]; // = COURSES;
+  courses$: Observable<Course[]>; // = COURSES;
   coursesTotal: number;
+  private courseList: Course[];
 
   constructor(
     private coursesService: CoursesService,
@@ -34,15 +35,16 @@ export class AppComponent implements OnInit {
     const htmlElement = createCustomElement(CourseTitleComponent, {
       injector: this.injector,
     });
-    this.coursesService
-      .loadCourses()
-      .subscribe((courses) => (this.courses = courses));
-    this.coursesTotal = this.courses.length;
+    this.courses$ = this.coursesService.loadCourses();
+    this.courses$.subscribe((courses) => {
+      this.coursesTotal = courses.length;
+      this.courseList = courses;
+    });
     customElements.define("course-title", htmlElement);
   }
 
   onEditCourse() {
-    this.courses[1].category = "ADVANCED";
+    this.courseList[1].category = "ADVANCED";
   }
 
   save(course: Course) {
