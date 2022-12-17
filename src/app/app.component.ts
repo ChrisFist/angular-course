@@ -1,8 +1,14 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Injector, OnInit } from "@angular/core";
 import { Course } from "./model/course";
 import { Observable } from "rxjs";
 
 import { CoursesService } from "./courses/courses.service";
+import { CourseTitleComponent } from "./course-title/course-title.component";
+import {
+  createCustomElement,
+  NgElement,
+  WithProperties,
+} from "@angular/elements";
 
 @Component({
   selector: "app-root",
@@ -15,9 +21,14 @@ export class AppComponent implements OnInit {
   private courseList: Course[];
 
   constructor(
-    private coursesService: CoursesService // @Inject(CONFIG_TOKEN) private config: AppConfig,
-  ) //private injector: Injector
-  {}
+    private coursesService: CoursesService, // @Inject(CONFIG_TOKEN) private config: AppConfig,
+    private injector: Injector
+  ) {
+    const htmlElement = createCustomElement(CourseTitleComponent, {
+      injector: this.injector,
+    });
+    customElements.define("course-title", htmlElement);
+  }
 
   ngOnInit() {
     this.courses$ = this.coursesService.loadCourses();
@@ -25,6 +36,13 @@ export class AppComponent implements OnInit {
       this.coursesTotal = courses.length;
       this.courseList = courses;
     });
+
+    // const courseTitle: NgElement & WithProperties<CourseTitleComponent> =
+    //   document.createElement("course-title") as any;
+
+    // courseTitle.title = "TEST";
+    // // Add to the DOM
+    // document.body.appendChild(courseTitle);
   }
 
   onEditCourse() {
