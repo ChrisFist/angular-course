@@ -27,7 +27,7 @@
     "body-parser": "^1.18.3",
     "core-js": "^2.5.4",
     "cors": "^2.8.5",
-    "document-register-element": "1.8.1",
+    "document-register-element": "^1.8.1",
     "express": "^4.16.3",
     "rxjs": "^6.6.7",
     "zone.js": "~0.11.4"
